@@ -30,6 +30,8 @@ app.get("/update_pdl_info", async (req, res) => {
     url += "&email=" + email;
   }
 
+  console.log(url);
+
   let currentJob = {
     company: {
       name: "Unknown",
