@@ -15,8 +15,6 @@ app.listen(3010, () => {
 });
 
 app.get("/update_pdl_info", async (req, res) => {
-  console.log(process.env.hubspotAPIKey);
-
   let f_name = req.query.first_name;
   let l_name = req.query.last_name;
   let email = req.query.email;
@@ -80,34 +78,34 @@ app.get("/update_pdl_info", async (req, res) => {
             currentJob.title.name += " || " + jobs[i].title.name;
           }
         }
+
         console.log(currentJob);
+        Axios.patch(
+          "https://api.hubspot.com/crm/v3/objects/contacts/" + id,
+          {
+            properties: {
+              company: currentJob.company.name,
+              jobtitle: currentJob.title.name,
+              lastname: l_name,
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.hubspotAPIKey}`,
+            },
+          }
+        )
+          .then((response) => {
+            res.sendStatus(200);
+          })
+          .catch((error) => {
+            console.log(error);
+            res.sendStatus(error.response.status);
+          });
       } else {
         console.log(STATUS + " ERROR");
         res.sendStatus(400);
       }
-    })
-    .catch((error) => {
-      console.log(error);
-      res.sendStatus(error.response.status);
-    });
-
-  Axios.patch(
-    "https://api.hubspot.com/crm/v3/objects/contacts/" + id,
-    {
-      properties: {
-        company: currentJob.company.name,
-        jobtitle: currentJob.title.name,
-        lastname: l_name,
-      },
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.hubspotAPIKey}`,
-      },
-    }
-  )
-    .then((response) => {
-      res.sendStatus(200);
     })
     .catch((error) => {
       console.log(error);
