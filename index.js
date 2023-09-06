@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const Axios = require("axios");
+require("dotenv").config();
 
 app.use(cors());
 app.use(express.json());
@@ -46,8 +47,7 @@ app.get("/update_pdl_info", async (req, res) => {
   Axios.get(url, {
     headers: {
       "Content-Type": "application/json",
-      "X-Api-Key":
-        "95defabca26cfbec8fd205f398fa9041928440e1fc3c34a452c4cb36b0444ead",
+      "X-Api-Key": process.env.pdlAPIKey,
     },
   })
     .then((response) => {
@@ -96,6 +96,9 @@ app.get("/update_pdl_info", async (req, res) => {
       company: currentJob.company.name,
       jobtitle: currentJob.title.name,
       lastname: l_name,
+    },
+    headers: {
+      Authorization: `Bearer ${process.env.hubspotAPIKey}`,
     },
   })
     .then((response) => {
