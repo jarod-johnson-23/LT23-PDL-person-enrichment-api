@@ -19,6 +19,11 @@ app.get("/update_pdl_info", async (req, res) => {
   let l_name = req.query.last_name;
   let email = req.query.email;
   let id = req.query.id;
+  let phone = req.query.phone;
+  let state = req.query.state;
+  let mail_address = req.query.mail_address;
+  let personalAddr = "";
+  let companyAddr = "";
   let url =
     "https://api.peopledatalabs.com/v5/person/enrich?titlecase=true&min_likelihood=5";
   if (f_name) {
@@ -50,8 +55,27 @@ app.get("/update_pdl_info", async (req, res) => {
   })
     .then((response) => {
       const experience = response.data.data.experience;
+      const data = response.data.data;
       const STATUS = response.data.status;
       if (STATUS == 200) {
+        if (!l_name) {
+          l_name = data.last_name;
+        }
+        if (!phone && data.phone_numbers.length > 0) {
+          phone = data.phone_numbers[0];
+        }
+        if (!state && data.street_addresses.length > 0) {
+          state = data.street_addresses[0].name;
+        }
+        if (!mail_address && data.street_addresses.length > 0) {
+          personalAddr =
+            data.street_addresses[0].street_address +
+            ", " +
+            data.street_addresses[0].name +
+            " " +
+            data.street_addresses[0].postal_code;
+        }
+
         //loop through all jobs and decide which is most recent or currently ongoing
         var jobs = experience;
         for (var i = 0; i < jobs.length; i++) {
@@ -78,8 +102,25 @@ app.get("/update_pdl_info", async (req, res) => {
             currentJob.title.name += " || " + jobs[i].title.name;
           }
         }
+        if (currentJob.company.location.name) {
+          companyAddr =
+            currentJob.company.location.street_address +
+            ", " +
+            currentJob.company.location.name +
+            " " +
+            currentJob.company.location.postal_code;
+        }
 
+        properties = {
+          company: currentJob.company.name,
+          jobtitle: currentJob.title.name,
+          lastname: l_name,
+          phone: phone,
+          state: state,
+          address: "Job: " + companyAddr + " Personal: " + personalAddr,
+        };
         console.log(currentJob);
+        console.log(properties);
         Axios.patch(
           "https://api.hubspot.com/crm/v3/objects/contacts/" + id,
           {
@@ -87,6 +128,9 @@ app.get("/update_pdl_info", async (req, res) => {
               company: currentJob.company.name,
               jobtitle: currentJob.title.name,
               lastname: l_name,
+              phone: phone,
+              state: state,
+              address: "Job: " + companyAddr + " Personal: " + personalAddr,
             },
           },
           {
