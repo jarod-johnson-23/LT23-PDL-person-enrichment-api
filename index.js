@@ -33,8 +33,6 @@ app.get("/update_pdl_info", async (req, res) => {
     url += "&email=" + email;
   }
 
-  console.log(url);
-
   let currentJob = {
     company: {
       name: "Unknown",
@@ -93,16 +91,21 @@ app.get("/update_pdl_info", async (req, res) => {
       res.sendStatus(error.response.status);
     });
 
-  Axios.patch("https://api.hubspot.com/crm/v3/objects/contacts/" + id, {
-    properties: {
-      company: currentJob.company.name,
-      jobtitle: currentJob.title.name,
-      lastname: l_name,
+  Axios.patch(
+    "https://api.hubspot.com/crm/v3/objects/contacts/" + id,
+    {
+      properties: {
+        company: currentJob.company.name,
+        jobtitle: currentJob.title.name,
+        lastname: l_name,
+      },
     },
-    headers: {
-      Authorization: `Bearer ${process.env.hubspotAPIKey}`,
-    },
-  })
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.hubspotAPIKey}`,
+      },
+    }
+  )
     .then((response) => {
       res.sendStatus(200);
     })
