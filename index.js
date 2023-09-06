@@ -15,6 +15,8 @@ app.listen(3010, () => {
 });
 
 app.get("/update_pdl_info", async (req, res) => {
+  console.log(process.env.hubspotAPIKey);
+
   let f_name = req.query.first_name;
   let l_name = req.query.last_name;
   let email = req.query.email;
