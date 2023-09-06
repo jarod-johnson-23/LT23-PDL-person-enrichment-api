@@ -57,7 +57,8 @@ app.get("/update_pdl_info", async (req, res) => {
         for (var i = 0; i < jobs.length; i++) {
           if (
             typeof jobs[i].end_date !== "string" &&
-            typeof currentJob.end_date == "string"
+            typeof currentJob.end_date === "string" &&
+            typeof jobs[i].start_date === "string"
           ) {
             currentJob = jobs[i];
           } else if (
@@ -70,7 +71,7 @@ app.get("/update_pdl_info", async (req, res) => {
             ) {
               currentJob = jobs[i];
             }
-          } else {
+          } else if (typeof jobs[i].start_date === "string") {
             currentJob.company.name += " || " + jobs[i].company.name;
             currentJob.start_date += " || " + jobs[i].start_date;
             currentJob.end_date += " || " + jobs[i].end_date;
@@ -92,7 +93,7 @@ app.get("/update_pdl_info", async (req, res) => {
     properties: {
       company: currentJob.company.name,
       jobtitle: currentJob.title.name,
-      lastname: f_name,
+      lastname: l_name,
     },
   })
     .then((response) => {
