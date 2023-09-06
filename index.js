@@ -14,6 +14,10 @@ app.listen(3010, () => {
   console.log("App running on port 3010");
 });
 
+app.get("/", (req, res) => {
+  res.send({ Status: "OK", CODE: 200 });
+});
+
 app.get("/update_pdl_info", async (req, res) => {
   let f_name = req.query.first_name;
   let l_name = req.query.last_name;
@@ -58,14 +62,18 @@ app.get("/update_pdl_info", async (req, res) => {
       const data = response.data.data;
       const STATUS = response.data.status;
       if (STATUS == 200) {
-        if (!l_name) {
+        if (!l_name && data.last_name) {
           l_name = data.last_name;
         }
         if (!phone && data.phone_numbers.length > 0) {
           phone = data.phone_numbers[0];
+        } else if (!phone) {
+          phone = "Unknown";
         }
         if (!state && data.street_addresses.length > 0) {
           state = data.street_addresses[0].name;
+        } else if (!state) {
+          state = "Unknown";
         }
         if (!mail_address && data.street_addresses.length > 0) {
           personalAddr =
@@ -74,6 +82,8 @@ app.get("/update_pdl_info", async (req, res) => {
             data.street_addresses[0].name +
             " " +
             data.street_addresses[0].postal_code;
+        } else if (!mail_address) {
+          mail_address = "Unknown";
         }
 
         //loop through all jobs and decide which is most recent or currently ongoing
