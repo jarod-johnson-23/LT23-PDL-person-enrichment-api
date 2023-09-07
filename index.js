@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
   res.send({ Status: "OK", CODE: 200 });
 });
 
-app.get("/update_pdl_info", async (req, res) => {
+app.get("/update_pdl_person_info", async (req, res) => {
   let f_name = req.query.first_name;
   let l_name = req.query.last_name;
   let email = req.query.email;
@@ -105,7 +105,13 @@ app.get("/update_pdl_info", async (req, res) => {
             ) {
               currentJob = jobs[i];
             }
-          } else if (typeof jobs[i].start_date === "string") {
+          } else if (
+            typeof jobs[i].end_date === "string" &&
+            typeof currentJob.end_date !== "string" &&
+            typeof currentJob.start_date == "string"
+          ) {
+            //current job is still the current job
+          } else {
             currentJob.company.name += " || " + jobs[i].company.name;
             currentJob.start_date += " || " + jobs[i].start_date;
             currentJob.end_date += " || " + jobs[i].end_date;
@@ -162,8 +168,8 @@ app.get("/update_pdl_info", async (req, res) => {
       }
     })
     .catch((error) => {
-      console.log(error);
-      res.sendStatus(error.response.status);
+      console.log("Contact Not Found");
+      res.sendStatus(200);
     });
 
   //res.sendStatus(200);
