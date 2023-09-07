@@ -168,3 +168,7 @@ app.get("/update_pdl_info", async (req, res) => {
 
   //res.sendStatus(200);
 });
+
+app.get("/update-pdl-company-info", (req, res) => {
+  res.send({ Status: "OK", Code: 200 });
+});
