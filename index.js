@@ -19,6 +19,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/update_pdl_person_info", async (req, res) => {
+  if (req.header("X-Api-Key") != process.env.LTAPIKey) {
+    res.send({ Status: "Invalid API Key", Code: 401 });
+  }
   let f_name = req.query.first_name;
   let l_name = req.query.last_name;
   let email = req.query.email;
