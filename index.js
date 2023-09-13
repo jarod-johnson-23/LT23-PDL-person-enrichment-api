@@ -14,11 +14,11 @@ app.listen(3010, () => {
   console.log("App running on port 3010");
 });
 
-app.get("/", (req, res) => {
+app.get("/pdl/", (req, res) => {
   res.send({ Status: "OK", CODE: 200 });
 });
 
-app.get("/update_pdl_person_info", async (req, res) => {
+app.get("/pdl/update_pdl_person_info", async (req, res) => {
   if (req.header("X-Api-Key") != process.env.LTAPIKey) {
     res.send({ Status: "Invalid API Key", Code: 401 });
   }
@@ -234,6 +234,6 @@ app.get("/update_pdl_person_info", async (req, res) => {
   //res.sendStatus(200);
 });
 
-app.get("/update-pdl-company-info", (req, res) => {
+app.get("/pdl/update-pdl-company-info", (req, res) => {
   res.send({ Status: "OK", Code: 200 });
 });
