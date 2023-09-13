@@ -29,6 +29,14 @@ app.get("/update_pdl_person_info", async (req, res) => {
   let phone = req.query.phone;
   let state = req.query.state;
   let mail_address = req.query.mail_address;
+  let current_company = req.query.current_company;
+  if (!current_company) {
+    current_company = "Unknown";
+  }
+  let current_title = req.query.current_title;
+  if (!current_title) {
+    current_title = "Unknown";
+  }
   let personalAddr = "";
   let companyAddr = "";
   let url =
@@ -45,12 +53,12 @@ app.get("/update_pdl_person_info", async (req, res) => {
 
   let currentJob = {
     company: {
-      name: "Unknown",
+      name: current_company,
     },
     end_date: "0000-00",
     start_date: "0000-00",
     title: {
-      name: "Unknown",
+      name: current_title,
     },
   };
 
@@ -65,6 +73,9 @@ app.get("/update_pdl_person_info", async (req, res) => {
       const data = response.data.data;
       const STATUS = response.data.status;
       if (STATUS == 200) {
+        if (!f_name && data.first_name) {
+          f_name = data.first_name;
+        }
         if (!l_name && data.last_name) {
           l_name = data.last_name;
         }
@@ -133,6 +144,7 @@ app.get("/update_pdl_person_info", async (req, res) => {
         properties = {
           company: currentJob.company.name,
           jobtitle: currentJob.title.name,
+          firstname: f_name,
           lastname: l_name,
           phone: phone,
           state: state,
@@ -172,6 +184,50 @@ app.get("/update_pdl_person_info", async (req, res) => {
     })
     .catch((error) => {
       console.log("Contact Not Found");
+      if (!email) {
+        email == "Unknown";
+      }
+      if (!phone) {
+        phone == "Unknown";
+      }
+      if (!state) {
+        state == "Unknown";
+      }
+      if (!mail_address) {
+        mail_address == "Unknown";
+      }
+      if (!personalAddr) {
+        personalAddr == "Unknown";
+      }
+      if (!companyAddr) {
+        companyAddr == "Unknown";
+      }
+      Axios.patch(
+        "https://api.hubspot.com/crm/v3/objects/contacts/" + id,
+        {
+          properties: {
+            company: current_company,
+            jobtitle: current_title,
+            lastname: l_name,
+            phone: phone,
+            state: state,
+            address: "Job: " + companyAddr + " Personal: " + personalAddr,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.hubspotAPIKey}`,
+          },
+        }
+      )
+        .then((response) => {
+          res.sendStatus(200);
+        })
+        .catch((error) => {
+          console.log(error);
+          res.sendStatus(error.response.status);
+        });
+
       res.sendStatus(200);
     });
 
