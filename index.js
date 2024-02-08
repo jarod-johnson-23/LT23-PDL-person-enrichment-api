@@ -14,7 +14,7 @@ app.listen(3010, () => {
   console.log("App running on port 3010");
 });
 
-app.get("/pdl/", (req, res) => {
+app.get("/", (req, res) => {
   res.send({ Status: "OK", CODE: 200 });
 });
 
