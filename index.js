@@ -150,8 +150,8 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
           state: state,
           address: "Job: " + companyAddr + " Personal: " + personalAddr,
         };
-        console.log(currentJob);
-        console.log(properties);
+        // console.log(currentJob);
+        // console.log(properties);
         Axios.patch(
           "https://api.hubspot.com/crm/v3/objects/contacts/" + id,
           {
