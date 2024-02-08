@@ -71,6 +71,7 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
     .then((response) => {
       const experience = response.data.data.experience;
       const data = response.data.data;
+      const likelihood = response.data.likelihood;
       const STATUS = response.data.status;
       if (STATUS == 200) {
         if (!f_name && data.first_name) {
@@ -161,6 +162,7 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
               lastname: l_name,
               phone: phone,
               state: state,
+              likelihood: likelihood,
               address: "Job: " + companyAddr + " Personal: " + personalAddr,
             },
           },
@@ -211,6 +213,7 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
             lastname: l_name,
             phone: phone,
             state: state,
+            likelihood: 0,
             address: "Job: " + companyAddr + " Personal: " + personalAddr,
           },
         },
@@ -225,13 +228,9 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
         })
         .catch((error) => {
           console.log(error);
-          res.sendStatus(error.response.status);
+          res.sendStatus(error.response);
         });
-
-      res.sendStatus(200);
     });
-
-  //res.sendStatus(200);
 });
 
 app.get("/pdl/update-pdl-company-info", (req, res) => {
