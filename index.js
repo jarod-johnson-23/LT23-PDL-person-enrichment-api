@@ -31,11 +31,11 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
   let mail_address = req.query.mail_address;
   let current_company = req.query.current_company;
   if (!current_company) {
-    current_company = "Unknown";
+    current_company = "N/A";
   }
   let current_title = req.query.current_title;
   if (!current_title) {
-    current_title = "Unknown";
+    current_title = "N/A";
   }
   let personalAddr = "";
   let companyAddr = "";
@@ -83,12 +83,12 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
         if (!phone && data.phone_numbers.length > 0) {
           phone = data.phone_numbers[0];
         } else if (!phone) {
-          phone = "Unknown";
+          phone = "N/A";
         }
         if (!state && data.street_addresses.length > 0) {
           state = data.street_addresses[0].name;
         } else if (!state) {
-          state = "Unknown";
+          state = "N/A";
         }
         if (!mail_address && data.street_addresses.length > 0) {
           personalAddr =
@@ -98,7 +98,7 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
             " " +
             data.street_addresses[0].postal_code;
         } else if (!mail_address) {
-          mail_address = "Unknown";
+          mail_address = "N/A";
         }
 
         //loop through all jobs and decide which is most recent or currently ongoing
@@ -187,22 +187,22 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
     .catch((error) => {
       console.log("Contact Not Found");
       if (!email) {
-        email == "Unknown";
+        email == "N/A";
       }
       if (!phone) {
-        phone == "Unknown";
+        phone == "N/A";
       }
       if (!state) {
-        state == "Unknown";
+        state == "N/A";
       }
       if (!mail_address) {
-        mail_address == "Unknown";
+        mail_address == "N/A";
       }
       if (!personalAddr) {
-        personalAddr == "Unknown";
+        personalAddr == "N/A";
       }
       if (!companyAddr) {
-        companyAddr == "Unknown";
+        companyAddr == "N/A";
       }
       Axios.patch(
         "https://api.hubspot.com/crm/v3/objects/contacts/" + id,
