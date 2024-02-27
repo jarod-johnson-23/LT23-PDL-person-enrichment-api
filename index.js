@@ -181,11 +181,49 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
           });
       } else {
         console.log(STATUS + " ERROR");
+        console.log("New Contact Not Found");
+        if (!email) {
+          email == "N/A";
+        }
+        if (!phone) {
+          phone == "N/A";
+        }
+        if (!state) {
+          state == "N/A";
+        }
+        if (!mail_address) {
+          mail_address == "N/A";
+        }
+        if (!personalAddr) {
+          personalAddr == "N/A";
+        }
+        if (!companyAddr) {
+          companyAddr == "N/A";
+        }
+        Axios.patch(
+          "https://api.hubspot.com/crm/v3/objects/contacts/" + id,
+          {
+            properties: {
+              company: current_company,
+              jobtitle: current_title,
+              lastname: l_name,
+              phone: phone,
+              state: state,
+              likelihood: 0,
+              address: "Job: " + companyAddr + " Personal: " + personalAddr,
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${process.env.hubspotAPIKey}`,
+            },
+          }
+        );
         res.sendStatus(400);
       }
     })
     .catch((error) => {
-      console.log("Contact Not Found");
+      console.log("New Contact Not Found");
       if (!email) {
         email == "N/A";
       }
