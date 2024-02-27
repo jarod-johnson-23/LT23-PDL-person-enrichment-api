@@ -190,7 +190,7 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
         email == "N/A";
       }
       if (!phone) {
-        phone == "0000000000";
+        phone == "N/A";
       }
       if (!state) {
         state == "N/A";
