@@ -33,6 +33,8 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
   if (!current_company) {
     current_company = "N/A";
   }
+  console.log("-----------------");
+  console.log(phone);
   let current_title = req.query.current_title;
   if (!current_title) {
     current_title = "N/A";
@@ -74,6 +76,7 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
       const likelihood = response.data.likelihood;
       const STATUS = response.data.status;
       if (STATUS == 200) {
+        console.log("RETURNED 200");
         if (!f_name && data.first_name) {
           f_name = data.first_name;
         }
@@ -85,6 +88,7 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
         } else if (!phone) {
           phone = "N/A";
         }
+        console.log(phone);
         if (!state && data.street_addresses.length > 0) {
           state = data.street_addresses[0].name;
         } else if (!state) {
@@ -173,9 +177,11 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
           }
         )
           .then((response) => {
+            console.log("UPDATED PHONE");
             res.sendStatus(200);
           })
           .catch((error) => {
+            console.log("DIDN'T UPDATE PHONE");
             console.log(error);
             res.sendStatus(error.response.status);
           });
@@ -223,13 +229,14 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
       }
     })
     .catch((error) => {
-      console.log("New Contact Not Found");
+      console.log("NOT 200 RESPONSE");
       if (!email) {
         email == "N/A";
       }
       if (!phone) {
         phone == "N/A";
       }
+      console.log(phone);
       if (!state) {
         state == "N/A";
       }
@@ -262,9 +269,11 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
         }
       )
         .then((response) => {
+          console.log("SET PHONE = N/A");
           res.sendStatus(200);
         })
         .catch((error) => {
+          console.log("ERROR SETTING PHONE TO N/A");
           console.log(error);
           res.sendStatus(error.response);
         });
