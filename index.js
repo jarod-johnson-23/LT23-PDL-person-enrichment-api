@@ -189,22 +189,22 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
         console.log(STATUS + " ERROR");
         console.log("New Contact Not Found");
         if (!email) {
-          email == "N/A";
+          email = "N/A";
         }
         if (!phone) {
-          phone == "N/A";
+          phone = "N/A";
         }
         if (!state) {
-          state == "N/A";
+          state = "N/A";
         }
         if (!mail_address) {
-          mail_address == "N/A";
+          mail_address = "N/A";
         }
         if (!personalAddr) {
-          personalAddr == "N/A";
+          personalAddr = "N/A";
         }
         if (!companyAddr) {
-          companyAddr == "N/A";
+          companyAddr = "N/A";
         }
         Axios.patch(
           "https://api.hubspot.com/crm/v3/objects/contacts/" + id,
@@ -231,23 +231,23 @@ app.get("/pdl/update_pdl_person_info", async (req, res) => {
     .catch((error) => {
       console.log("NOT 200 RESPONSE");
       if (!email) {
-        email == "N/A";
+        email = "N/A";
       }
       if (!phone) {
-        phone == "N/A";
+        phone = "N/A";
       }
       console.log(phone);
       if (!state) {
-        state == "N/A";
+        state = "N/A";
       }
       if (!mail_address) {
-        mail_address == "N/A";
+        mail_address = "N/A";
       }
       if (!personalAddr) {
-        personalAddr == "N/A";
+        personalAddr = "N/A";
       }
       if (!companyAddr) {
-        companyAddr == "N/A";
+        companyAddr = "N/A";
       }
       Axios.patch(
         "https://api.hubspot.com/crm/v3/objects/contacts/" + id,
